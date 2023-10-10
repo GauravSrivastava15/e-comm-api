@@ -1,13 +1,19 @@
 import express from "express";
-import  CartItemsController  from "./cartItems.controller.js";
+import CartItemsController from "./cartItems.controller.js";
 
-const cartRouter = express.Router()
+const cartRouter = express.Router();
 const cartController = new CartItemsController();
 
-cartRouter.get('/', cartController.get)
+cartRouter.get("/", (req, res) => {
+    cartController.get(req, res);
+  });
 
-cartRouter.post("/", cartController.add)
+cartRouter.post("/", (req, res) => {
+  cartController.add(req, res);
+});
 
-cartRouter.delete('/:id', cartController.delete)
+cartRouter.delete("/:id", (req, res) => {
+    cartController.delete(req, res);
+  });
 
-export default cartRouter
+export default cartRouter;

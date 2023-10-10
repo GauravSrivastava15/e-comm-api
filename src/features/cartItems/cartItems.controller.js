@@ -1,30 +1,41 @@
+import { ApplicationError } from "../../error-handler/applicationError.js";
 import CartItemsModel from "./cartItems.model.js";
-export default class CartItemsController{
-    add(req, res){
-        const {productId, quantity} = req.query;
-        const userId = req.userId;
-        const result = CartItemsModel.add(productId, userId, quantity)
-        if(result.status){
-            res.status(201).json({"success": true, "cart": result.res})
-        }else{
-            res.status(400).json({ success: false, msg: result.res })
-        }
-
+import CartItemsRepository from "./cartItems.repository.js";
+export default class CartItemsController {
+  constructor() {
+    this.cartItemsRepository = new CartItemsRepository();
+  }
+  async add(req, res) {
+    try {
+      const { productID, quantity } = req.body;
+      const userID = req.userID;
+      console.log(userID);
+      await this.cartItemsRepository.add(productID, userID, quantity);
+      res.status(201).send("Cart is updated");
+    } catch (err) {
+      console.log(err);
+      res.status(400).send("Something went wrong");
     }
+  }
 
-    get(req,res){
-        const userId = req.userId;
-        const items = CartItemsModel.get(userId)
-        return res.status(200).send(items)
+  async get(req, res) {
+    try {
+      const userID = req.userID;
+      const items = await this.cartItemsRepository.get(userID);
+      return res.status(200).send(items);
+    } catch (err) {
+      console.log(err);
+      res.status(400).send("Something went wrong");
     }
+  }
 
-    delete(req,res){
-        const userId = req.userId;
-        const cartItemId = req.params.id;
-        const error = CartItemsModel.delete(cartItemId, userId)
-        if(error){
-            res.status(404).send(error)
-        }
-        return res.status(200).send('Cart Item is removed')
+  async delete(req, res) {
+    const userID = req.userID;
+    const cartItemID = req.params.id;
+    const isDeleted = await this.cartItemsRepository.delete(cartItemID, userID);
+    if (!isDeleted) {
+      res.status(404).send('item not found');
     }
+    return res.status(200).send("Cart Item is removed");
+  }
 }

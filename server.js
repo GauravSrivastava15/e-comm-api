@@ -1,3 +1,4 @@
+import "./env.js"
 import express from "express";
 import swagger, { serve } from "swagger-ui-express";
 import productRouter from "./src/features/product/product.routes.js";
@@ -10,8 +11,14 @@ import apiDocs from "./swagger.json" assert { type: "json" };
 import cors from "cors";
 import loggerMiddleware from "./src/middlewares/logger.middleware.js";
 import { ApplicationError } from "./src/error-handler/applicationError.js";
+import {connectToMongoDB} from "./src/cofig/mongodb.js";
+import dotenv from "dotenv"
+import orderRouter from "./src/features/order/order.routes.js";
 
 const app = express();
+
+//load all the environment variables in application
+dotenv.config()
 
 var corsOptions = {
   origin: "http://localhost:5500/",
@@ -48,6 +55,8 @@ app.use("/api/products", loggerMiddleware, jwtAuth, productRouter);
 app.use("/api/users", userRouter);
 app.use("/api/cartItems", jwtAuth, cartRouter);
 
+app.use('/api/orders', jwtAuth, orderRouter)
+
 // Error handler middleware
 app.use((err, req, res, next) =>{
   console.log(err)
@@ -64,6 +73,7 @@ app.use((req, res) => {
 
 app.listen(8080, () => {
   console.log("server is running on 8080");
+  connectToMongoDB()
 });
 
 

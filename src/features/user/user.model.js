@@ -1,42 +1,33 @@
+
+import { ApplicationError } from "../../error-handler/applicationError.js";
+
 export default class UserModel {
-  constructor(name, email, pasword, type, id) {
-    this.id = id
+  constructor(name, email, password, type, id) {
     this.name = name;
     this.email = email;
-    this.pasword = pasword;
+    this.password = password;
     this.type = type;
-  }
-  static signUp(name, email, password, type) {
-    const newUser = new UserModel(name, email, password, type);
-    newUser.id = users.length + 1;
-    users.push(newUser);
-    return newUser
-  }
-  static signIn(email, password) {
-    const user = users.find((u) => u.email == email && u.pasword == password);
-    return user;
+    this._id = id;
   }
 
-  static getAll(){
-    return users
+  static getAll() {
+    return users;
   }
 }
 
-
-
-let users = [
+var users = [
   {
     id: 1,
-    name: "Seller User",
-    email: "seller@ecom.com",
-    pasword: "Password",
-    type: "seller",
+    name: 'Seller User',
+    email: 'seller@ecom.com',
+    password: 'Password1',
+    type: 'seller',
   },
   {
     id: 2,
-    name: "Customer User",
-    email: "customer@ecom.com",
-    pasword: "Password",
-    type: "customer",
+    name: 'Customer User',
+    email: 'customer@ecom.com',
+    password: 'Password1',
+    type: 'customer',
   },
 ];
