@@ -14,6 +14,8 @@ import { ApplicationError } from "./src/error-handler/applicationError.js";
 import {connectToMongoDB} from "./src/cofig/mongodb.js";
 import dotenv from "dotenv"
 import orderRouter from "./src/features/order/order.routes.js";
+import { connectUsingMongoose } from "./src/cofig/mongoose.config.js";
+import mongoose from "mongoose";
 
 const app = express();
 
@@ -60,6 +62,9 @@ app.use('/api/orders', jwtAuth, orderRouter)
 // Error handler middleware
 app.use((err, req, res, next) =>{
   console.log(err)
+  if(err instanceof mongoose.Error.ValidationError){
+    res.status(400).send(err.message)
+  }
   if(err instanceof ApplicationError){
     res.status(err.code).send(err.message)
   }
@@ -73,7 +78,8 @@ app.use((req, res) => {
 
 app.listen(8080, () => {
   console.log("server is running on 8080");
-  connectToMongoDB()
+  // connectToMongoDB()
+  connectUsingMongoose()
 });
 
 

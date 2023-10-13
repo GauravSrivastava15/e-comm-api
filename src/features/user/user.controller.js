@@ -1,5 +1,6 @@
 import UserModel from "./user.model.js";
 import jwt from "jsonwebtoken";
+// import UserRepository from "./user.repository_old.js";
 import UserRepository from "./user.repository.js";
 import bcrypt from "bcrypt";
 
@@ -7,14 +8,33 @@ export default class UserController {
   constructor() {
     this.userRepository = new UserRepository();
   }
-  async signUp(req, res) {
+
+  async resetPassword(req,res,next){
+    const {newPassword} = req.body;
+    const hashedPassword = await bcrypt.hash(newPassword, 12)
+    const userID = req.userID
+    try{
+      await this.userRepository.resetPassword(userID, hashedPassword)
+      res.status(200).send('Password is Updated')
+    }catch(err){
+      console.log(err);
+      console.log("Passing error to middleware");
+      next(err);
+    }
+  }
+
+  async signUp(req, res,next) {
+    try{
     const { name, email, password, type } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 12);
+    // const hashedPassword = await bcrypt.hash(password, 12);
 
-    const user = new UserModel(name, email, hashedPassword, type);
+    const user = new UserModel(name, email, password, type);
     await this.userRepository.signUp(user);
     res.status(201).send(user);
+    }catch(err){
+      next(err)
+    }
   }
 
   async signIn(req, res, next) {
