@@ -27,9 +27,9 @@ export default class UserController {
     try{
     const { name, email, password, type } = req.body;
 
-    // const hashedPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = await bcrypt.hash(password, 12);
 
-    const user = new UserModel(name, email, password, type);
+    const user = new UserModel(name, email, hashedPassword, type);
     await this.userRepository.signUp(user);
     res.status(201).send(user);
     }catch(err){

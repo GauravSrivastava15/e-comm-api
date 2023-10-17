@@ -16,6 +16,7 @@ import dotenv from "dotenv"
 import orderRouter from "./src/features/order/order.routes.js";
 import { connectUsingMongoose } from "./src/cofig/mongoose.config.js";
 import mongoose from "mongoose";
+import likeRouter from "./src/features/like/like.routes.js";
 
 const app = express();
 
@@ -58,6 +59,8 @@ app.use("/api/users", userRouter);
 app.use("/api/cartItems", jwtAuth, cartRouter);
 
 app.use('/api/orders', jwtAuth, orderRouter)
+
+app.use('/api/likes',jwtAuth, likeRouter)
 
 // Error handler middleware
 app.use((err, req, res, next) =>{

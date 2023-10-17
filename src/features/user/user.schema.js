@@ -7,12 +7,12 @@ export const userSchema = new Schema({
         match:[/.+\@.+\../,"Please enter a valid email"]
     },
     password: {type:String,
-        validate:{
-            validator:function(value){
-                return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value)
-            },
-            message:"Password should be atleast 8 characters and have a special character one uppercase one lowercase and atleast one digit"
-        }
+        // validate:{
+        //     validator:function(value){
+        //         return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value)
+        //     },
+        //     message:"Password should be atleast 8 characters and have a special character one uppercase one lowercase and atleast one digit"
+        // }
     },
     type:{type:String, enum:["Customer","Seller"]}
 })
