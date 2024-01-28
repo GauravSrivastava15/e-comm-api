@@ -14,6 +14,7 @@ export const connectUsingMongoose = async ()=>{
         console.log("Mongodb connected using mongoose")
         addCategories()
     }catch(err){
+        console.log("url is",url)
         console.log(err)
         console.log("There have been errors")
     }
